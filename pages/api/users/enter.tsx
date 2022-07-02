@@ -1,6 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import client from "@libs/server/client";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
+import twilio from "twilio";
+import dotenv from "dotenv";
+
+dotenv.config();
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
     const { phone, email } = req.body;
@@ -24,6 +29,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         },
     });
     console.log(token);
+    if (phone) {
+        const message = await twilioClient.messages.create({
+            messagingServiceSid: process.env.TWILIO_MSID,
+            to: process.env.MY_PHONE!,
+            body: `Your login token is ${payload}`,
+        });
+        console.log(message);
+    }
     // if (phone) {
     //     user = await client.user.upsert({
     //         where: {
