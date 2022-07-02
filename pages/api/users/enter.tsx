@@ -3,9 +3,12 @@ import client from "@libs/server/client";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import twilio from "twilio";
 import dotenv from "dotenv";
+import Mailgun from "mailgun-js";
 
 dotenv.config();
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+// const mailgun = new Mailgun({ apiKey: process.env.MAILGUN_PRIVATE!, domain: process.env.MAILGUN_BASE! });
+// const msg = mailgun({ apiKey: process.env.MAILGUN_PRIVATE, domain: process.env.MAILGUN_BASE });
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
     const { phone, email } = req.body;
@@ -29,14 +32,33 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         },
     });
     console.log(token);
-    if (phone) {
-        const message = await twilioClient.messages.create({
-            messagingServiceSid: process.env.TWILIO_MSID,
-            to: process.env.MY_PHONE!,
-            body: `Your login token is ${payload}`,
-        });
-        console.log(message);
-    }
+    //완성본(폰번호만)
+    // if (phone) {
+    //     const message = await twilioClient.messages.create({
+    //         messagingServiceSid: process.env.TWILIO_MSID,
+    //         to: process.env.MY_PHONE!,
+    //         body: `Your login token is ${payload}`,
+    //     });
+    //     console.log(message);
+    // }
+    //-----------------------------------------------------------
+    // else if (email) {
+    //     // const message = await twilioClient.messages.create({
+    //     //     messagingServiceSid: process.env.TWILIO_MSID,
+    //     //     to: process.env.MY_PHONE!,
+    //     //     body: `Your login token is ${payload}`,
+    //     // });
+    //     // console.log(message);
+    //     const data = {
+    //         from: process.env.MAILGUN_BASE,
+    //         to: process.env.MY_EMAIL,
+    //         subject: `Hello ${payload}`,
+    //         text: `There?`,
+    //     };
+    //     const message = await mailgun.messages().send(data);
+    //     console.log(message);
+    // }
+    //------------------------------------------------------------
     // if (phone) {
     //     user = await client.user.upsert({
     //         where: {
