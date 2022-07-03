@@ -4,6 +4,7 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import twilio from "twilio";
 import dotenv from "dotenv";
 import Mailgun from "mailgun-js";
+import { withApiSession } from "@libs/server/withSession";
 
 dotenv.config();
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
@@ -126,7 +127,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     // res.json({ ok: true });
 }
 
-export default withHandler("POST", handler);
+export default withApiSession(
+    withHandler({
+        method: "POST",
+        handler,
+        isPrivate: false,
+    }),
+);
 //NEXT에서 api function 만들시 반드시 export default async 넣어줘야함
 
 // Token을 통한 유저 인증

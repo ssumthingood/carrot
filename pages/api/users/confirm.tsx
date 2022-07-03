@@ -26,5 +26,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     res.json({ ok: true });
 }
 
-export default withApiSession(withHandler("POST", handler));
+export default withApiSession(
+    withHandler({
+        method: "POST",
+        handler,
+        isPrivate: false,
+    }),
+);
 //NEXT에서 api function 만들시 반드시 export default async 넣어줘야함

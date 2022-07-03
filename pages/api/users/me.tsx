@@ -16,5 +16,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     });
 }
 
-export default withApiSession(withHandler("GET", handler));
+export default withApiSession(
+    withHandler({
+        method: "GET",
+        handler,
+    }),
+);
 //NEXT에서 api function 만들시 반드시 export default async 넣어줘야함
