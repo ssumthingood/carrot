@@ -7,41 +7,48 @@ import { withApiSession } from "@libs/server/withSession";
 dotenv.config();
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
-    if (req.method === "GET") {
-        const products = await client.product.findMany({});
-        return res.json({
-            ok: true,
-            products,
+    const {
+        query: { id },
+        session: { user },
+    } = req;
+    const alreadyExists = await client.fav.findFirst({
+        where: {
+            productId: +id.toString(),
+            userId: user?.id,
+        },
+    });
+    if (alreadyExists) {
+        //delete
+        await client.fav.delete({
+            where: {
+                id: alreadyExists.id,
+            },
         });
-    }
-    if (req.method === "POST") {
-        const {
-            body: { name, price, description },
-            session: { user },
-        } = req;
-        const product = await client.product.create({
+    } else {
+        //create
+        await client.fav.create({
             data: {
-                name,
-                price: +price,
-                description,
-                image: "XX",
                 user: {
                     connect: {
                         id: user?.id,
                     },
                 },
+                product: {
+                    connect: {
+                        id: +id.toString(),
+                    },
+                },
             },
         });
-        res.json({
-            ok: true,
-            product,
-        });
     }
+    res.json({
+        ok: true,
+    });
 }
 
 export default withApiSession(
     withHandler({
-        methods: ["GET", "POST"],
+        methods: ["POST"],
         handler,
     }),
 );
