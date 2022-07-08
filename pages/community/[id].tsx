@@ -66,8 +66,9 @@ const CommunityPostDetail: NextPage = () => {
     useEffect(() => {
         if (answerData && answerData.ok) {
             reset();
+            mutate();
         }
-    }, [answerData, reset]);
+    }, [answerData, reset, mutate]);
 
     console.log(data);
     return (
@@ -105,12 +106,12 @@ const CommunityPostDetail: NextPage = () => {
                                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                                 ></path>
                             </svg>
-                            <span>답변 {data?.post._count.answers}</span>
+                            <span>답변 {data?.post?._count.answers}</span>
                         </span>
                     </div>
                 </div>
                 <div className="px-4 my-5 space-y-5">
-                    {data?.post.answers.map((answer) => (
+                    {data?.post?.answers?.map((answer) => (
                         <div key={answer.id} className="flex items-start space-x-3">
                             <div className="w-8 h-8 bg-slate-200 rounded-full" />
                             <div>
