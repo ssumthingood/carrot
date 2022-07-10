@@ -15,11 +15,11 @@ const Streams: NextPage = () => {
     return (
         <Layout hasTabBar title="라이브">
             <div className=" divide-y-[1px] space-y-4">
-                {data?.streams.map((stream) => (
-                    <Link key={stream.id} href={`/live/${stream.id}`}>
+                {data?.streams?.map((stream) => (
+                    <Link key={stream.id} href={`/streams/${stream.id}`}>
                         <a className="pt-4 block  px-4">
                             <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
-                            <h1 className="text-2xl mt-2 font-bold text-gray-900">{stream.name}</h1>
+                            <h1 className="text-2xl mt-2 font-bold text-gray-900">{stream?.name}</h1>
                         </a>
                     </Link>
                 ))}
