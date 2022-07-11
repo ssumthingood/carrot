@@ -27,7 +27,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         res.json({ ok: true, stream });
     }
     if (req.method === "GET") {
-        const streams = await client.stream.findMany();
+        const streams = await client.stream.findMany({
+            //take: 15,
+            //skip:15,
+            //프론트에서 페이징 정의 후 GET url로 백에 보내서 page만큼 skip & take
+        });
         res.json({ ok: true, streams });
     }
 }
